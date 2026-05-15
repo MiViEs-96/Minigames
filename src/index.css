@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  --color-app-bg: var(--color-bg);
+  --color-app-panel: var(--color-panel);
+  --color-app-text: var(--color-text);
+  --color-app-accent: var(--color-accent);
+}
+
+:root {
+  --color-bg: #FDFCF0;
+  --color-panel: #F5F3E7;
+  --color-text: #2D2D2D;
+  --color-accent: #7D8C7A;
+}
+
+.dark {
+  --color-bg: #1A1C2C;
+  --color-panel: #24273D;
+  --color-text: #E0E0E0;
+  --color-accent: #5D6B8F;
+}
+
+@layer base {
+  body {
+    @apply transition-colors duration-300 bg-app-bg text-app-text;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.sudoku-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  aspect-ratio: 1 / 1;
+  border: 2px solid currentColor;
+}
+
+.sudoku-cell {
+  border: 1px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+}
+
+.sudoku-cell:nth-child(3n) {
+  border-right-width: 2px;
+}
+
+.sudoku-cell:nth-child(9n) {
+  border-right-width: 1px;
+}
+
+.sudoku-cell:nth-child(n+19):nth-child(-n+27),
+.sudoku-cell:nth-child(n+46):nth-child(-n+54) {
+  border-bottom-width: 2px;
+}
+
+.sudoku-cell.selected {
+  background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.sudoku-cell.error {
+  color: #ef4444;
+}
+
+.sudoku-cell.fixed {
+  opacity: 0.8;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  font-size: 0.6rem;
+  line-height: 1;
+  color: #6b7280;
+}
