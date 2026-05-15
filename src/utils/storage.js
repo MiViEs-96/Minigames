@@ -1,64 +1,53 @@
-const STORAGE_KEY = 'minigames_sudoku_scores';
+const SUDOKU_KEY = 'minigames_sudoku_scores';
+const TETRIS_KEY = 'minigames_tetris_scores';
 
 /**
- * Salva un nuovo tempo nel localStorage.
- * Mantiene solo i migliori 5 tempi per ogni difficoltà.
- * @param {string} username - Nome dell'utente
- * @param {string} difficulty - 'easy', 'medium', 'hard'
- * @param {number} timeSeconds - Tempo in secondi
+ * SUDOKU
  */
-export const saveScore = (username, difficulty, timeSeconds) => {
-  const scores = getScores();
+export const saveSudokuScore = (username, difficulty, timeSeconds) => {
+  const scores = getSudokuScores();
+  if (!scores[difficulty]) scores[difficulty] = [];
 
-  if (!scores[difficulty]) {
-    scores[difficulty] = [];
-  }
-
-  scores[difficulty].push({
-    username,
-    time: timeSeconds,
-    date: new Date().toISOString()
-  });
-
-  // Ordina per tempo crescente (il migliore è il più basso)
+  scores[difficulty].push({ username, time: timeSeconds, date: new Date().toISOString() });
   scores[difficulty].sort((a, b) => a.time - b.time);
-
-  // Mantieni solo i primi 5
   scores[difficulty] = scores[difficulty].slice(0, 5);
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+  localStorage.setItem(SUDOKU_KEY, JSON.stringify(scores));
   return scores[difficulty];
 };
 
-/**
- * Recupera i punteggi salvati.
- * @returns {Object} Oggetto con le categorie di difficoltà e i relativi punteggi
- */
-export const getScores = () => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (!stored) {
-    return {
-      easy: [],
-      medium: [],
-      hard: []
-    };
-  }
-  try {
-    return JSON.parse(stored);
-  } catch (e) {
-    console.error("Errore nel caricamento dei punteggi:", e);
-    return {
-      easy: [],
-      medium: [],
-      hard: []
-    };
-  }
+export const getSudokuScores = () => {
+  const stored = localStorage.getItem(SUDOKU_KEY);
+  if (!stored) return { easy: [], medium: [], hard: [] };
+  try { return JSON.parse(stored); } catch (e) { return { easy: [], medium: [], hard: [] }; }
 };
 
 /**
- * Formatta i secondi in stringa MM:SS
- * @param {number} seconds
- * @returns {string}
+ * TETRIS
+ */
+export const saveTetrisScore = (username, mode, difficulty, value) => {
+  const scores = getTetrisScores();
+  const key = `${mode}_${difficulty}`; // e.g., 'time_easy' or 'score_easy'
+  if (!scores[key]) scores[key] = [];
+
+  scores[key].push({ username, value, date: new Date().toISOString() });
+
+  // Per 'time' e 'score' in Tetris, il valore più ALTO è il migliore
+  scores[key].sort((a, b) => b.value - a.value);
+  scores[key] = scores[key].slice(0, 5);
+
+  localStorage.setItem(TETRIS_KEY, JSON.stringify(scores));
+  return scores[key];
+};
+
+export const getTetrisScores = () => {
+  const stored = localStorage.getItem(TETRIS_KEY);
+  if (!stored) return {};
+  try { return JSON.parse(stored); } catch (e) { return {}; }
+};
+
+/**
+ * UTILS
  */
 export const formatTime = (seconds) => {
   const mins = Math.floor(seconds / 60);

@@ -36,6 +36,18 @@
   animation: fadeIn 0.5s ease-out forwards;
 }
 
+.game-btn-green {
+  @apply w-full py-2 px-4 rounded-lg bg-green-500/10 hover:bg-green-500/20 text-green-600 dark:text-green-400 font-medium transition-colors border border-green-500/20;
+}
+
+.game-btn-orange {
+  @apply w-full py-2 px-4 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 font-medium transition-colors border border-orange-500/20;
+}
+
+.game-btn-red {
+  @apply w-full py-2 px-4 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 font-medium transition-colors border border-red-500/20;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

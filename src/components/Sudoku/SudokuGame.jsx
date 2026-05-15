@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, RotateCcw, Lightbulb, Pencil, Play, Trash2, Trophy } from 'lucide-react';
 import { generateSudoku, findErrors } from '../../utils/sudokuLogic';
-import { saveScore, getScores, formatTime } from '../../utils/storage';
+import { saveSudokuScore, getSudokuScores, formatTime } from '../../utils/storage';
 
 const SudokuGame = ({ username, difficulty, onBack, darkMode }) => {
   const [grid, setGrid] = useState([]);
@@ -28,7 +28,7 @@ const SudokuGame = ({ username, difficulty, onBack, darkMode }) => {
     setErrors([]);
     setGameWon(false);
 
-    const scores = getScores();
+    const scores = getSudokuScores();
     setBestScores(scores[difficulty] || []);
   }, [difficulty]);
 
@@ -57,7 +57,7 @@ const SudokuGame = ({ username, difficulty, onBack, darkMode }) => {
       if (currentErrors.length === 0) {
         setGameWon(true);
         setIsActive(false);
-        const updatedScores = saveScore(username, difficulty, time);
+        const updatedScores = saveSudokuScore(username, difficulty, time);
         setBestScores(updatedScores);
       }
     }

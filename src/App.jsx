@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Lobby from './components/Lobby';
 import SudokuGame from './components/Sudoku/SudokuGame';
+import TetrisGame from './components/Tetris/TetrisGame';
 import { Sun, Moon } from 'lucide-react';
 
 function App() {
   const [user, setUser] = useState(null);
   const [screen, setScreen] = useState('login');
-  const [difficulty, setDifficulty] = useState('easy');
+  const [gameConfig, setGameConfig] = useState({ difficulty: 'easy', mode: 'time' });
   const [darkMode, setDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme === 'dark';
@@ -29,8 +30,13 @@ function App() {
   };
 
   const startSudoku = (diff) => {
-    setDifficulty(diff);
+    setGameConfig({ difficulty: diff });
     setScreen('sudoku');
+  };
+
+  const startTetris = (mode, diff) => {
+    setGameConfig({ mode, difficulty: diff });
+    setScreen('tetris');
   };
 
   const goToLobby = () => {
@@ -54,21 +60,30 @@ function App() {
         </button>
       </header>
 
-      <main className="max-w-4xl mx-auto p-4">
+      <main className="max-w-6xl mx-auto p-4">
         {screen === 'login' && <Login onLogin={handleLogin} />}
         {screen === 'lobby' && (
           <Lobby
             username={user}
             onStartSudoku={startSudoku}
+            onStartTetris={startTetris}
             onLogout={() => setScreen('login')}
           />
         )}
         {screen === 'sudoku' && (
           <SudokuGame
             username={user}
-            difficulty={difficulty}
+            difficulty={gameConfig.difficulty}
             onBack={goToLobby}
             darkMode={darkMode}
+          />
+        )}
+        {screen === 'tetris' && (
+          <TetrisGame
+            username={user}
+            mode={gameConfig.mode}
+            difficulty={gameConfig.difficulty}
+            onBack={goToLobby}
           />
         )}
       </main>
